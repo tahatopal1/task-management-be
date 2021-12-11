@@ -4,15 +4,17 @@ import com.project.taskmanagementbe.model.Task;
 import com.project.taskmanagementbe.model.User;
 import com.project.taskmanagementbe.repository.TaskRepository;
 import com.project.taskmanagementbe.repository.UsersRepository;
+import com.project.taskmanagementbe.wsdto.UserWsDto;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
-public class UsersServiceImpl implements UsersService {
+public class UsersServiceImpl implements UsersService, Converter<User, UserWsDto> {
 
     @Autowired
     private UsersRepository usersRepository;
@@ -21,8 +23,10 @@ public class UsersServiceImpl implements UsersService {
     private TaskRepository taskRepository;
 
     @Override
-    public List<User> findAll() {
-        return usersRepository.findAll();
+    public List<UserWsDto> findAll() {
+        return usersRepository.findAll().stream()
+                .map(this::convert)
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -39,5 +43,15 @@ public class UsersServiceImpl implements UsersService {
                 e.printStackTrace();
             }
         });
+    }
+
+    @Override
+    public UserWsDto convert(User user) {
+        UserWsDto userWsDto = new UserWsDto(user.getUsername(), user.getPassword(), user.getEnabled());
+        userWsDto.setTasks(user.getTasks().stream().map(task -> {
+            task.setUser(null);
+            return task;
+        }).collect(Collectors.toList()));
+        return userWsDto;
     }
 }
