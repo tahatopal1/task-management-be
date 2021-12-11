@@ -17,9 +17,6 @@ public class TaskServiceImpl implements TaskService, Converter<Task, TaskWsDto> 
     @Autowired
     private TaskRepository taskRepository;
 
-    @Autowired
-    private GeneralUtility generalUtility;
-
     @Override
     public List<TaskWsDto> findAll() {
         return taskRepository.findAll().stream()
