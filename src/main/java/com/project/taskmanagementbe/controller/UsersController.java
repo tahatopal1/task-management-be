@@ -3,6 +3,7 @@ package com.project.taskmanagementbe.controller;
 import com.project.taskmanagementbe.model.Task;
 import com.project.taskmanagementbe.model.User;
 import com.project.taskmanagementbe.service.UsersService;
+import com.project.taskmanagementbe.wsdto.UserWsDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,7 +17,7 @@ public class UsersController {
     private UsersService usersService;
 
     @GetMapping("/users")
-    public List<User> findAll(){
+    public List<UserWsDto> findAll(){
         return usersService.findAll();
     }
 

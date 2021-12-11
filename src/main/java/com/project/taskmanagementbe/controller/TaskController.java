@@ -2,6 +2,7 @@ package com.project.taskmanagementbe.controller;
 
 import com.project.taskmanagementbe.model.Task;
 import com.project.taskmanagementbe.service.TaskService;
+import com.project.taskmanagementbe.wsdto.TaskWsDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,7 +18,7 @@ public class TaskController {
     private TaskService taskService;
 
     @GetMapping("/task")
-    public List<Task> getTasks(){
+    public List<TaskWsDto> getTasks(){
         return taskService.findAll();
     }
 
