@@ -4,9 +4,7 @@ import com.project.taskmanagementbe.model.Task;
 import com.project.taskmanagementbe.service.TaskService;
 import com.project.taskmanagementbe.wsdto.TaskWsDto;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -22,5 +20,10 @@ public class TaskController {
         return taskService.findAll();
     }
 
+    @PostMapping("/task")
+    public TaskWsDto createTask(@RequestBody TaskWsDto taskWsDto,@RequestParam String username){
+        taskService.createTask(taskWsDto, username);
+        return taskWsDto;
+    }
 
 }

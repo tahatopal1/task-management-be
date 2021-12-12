@@ -9,4 +9,6 @@ public interface TaskService {
 
     List<TaskWsDto> findAll();
 
+    void createTask(TaskWsDto taskWsDto, String username);
+
 }

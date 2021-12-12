@@ -14,6 +14,19 @@ public class Task {
 
     private String title;
 
+    public Task() { }
+
+    public Task(int id, String title) {
+        this.id = id;
+        this.title = title;
+    }
+
+    public Task(int id, String title, User user) {
+        this.id = id;
+        this.title = title;
+        this.user = user;
+    }
+
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH})
     @JoinColumn(name = "user_id")
     @JsonBackReference
