@@ -4,6 +4,7 @@ import com.project.taskmanagementbe.model.Task;
 import com.project.taskmanagementbe.model.User;
 import com.project.taskmanagementbe.repository.TaskRepository;
 import com.project.taskmanagementbe.repository.UsersRepository;
+import com.project.taskmanagementbe.wsdto.TaskWsDto;
 import com.project.taskmanagementbe.wsdto.UserWsDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.converter.Converter;
@@ -38,7 +39,7 @@ public class UsersServiceImpl implements UsersService, Converter<User, UserWsDto
             usersRepository.save(user);
         }, () -> {
             try {
-                throw new Exception("UserServiceError: ");
+                throw new Exception("UserServiceError:  ");
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -48,9 +49,12 @@ public class UsersServiceImpl implements UsersService, Converter<User, UserWsDto
     @Override
     public UserWsDto convert(User user) {
         UserWsDto userWsDto = new UserWsDto(user.getUsername(), user.getPassword(), user.getEnabled());
-        userWsDto.setTasks(user.getTasks().stream().map(task -> {
-            task.setUser(null);
-            return task;
+        userWsDto.setTaskWsDtos(user.getTasks().stream().map(task -> {
+            TaskWsDto taskWsDto = new TaskWsDto();
+            taskWsDto.setUserWsDto(null);
+            taskWsDto.setTitle(task.getTitle());
+            taskWsDto.setId(task.getId());
+            return taskWsDto;
         }).collect(Collectors.toList()));
         return userWsDto;
     }

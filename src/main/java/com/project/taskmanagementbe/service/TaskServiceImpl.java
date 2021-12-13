@@ -4,6 +4,7 @@ import com.project.taskmanagementbe.model.Task;
 import com.project.taskmanagementbe.repository.TaskRepository;
 import com.project.taskmanagementbe.repository.UsersRepository;
 import com.project.taskmanagementbe.wsdto.TaskWsDto;
+import com.project.taskmanagementbe.wsdto.UserWsDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Service;
@@ -39,9 +40,13 @@ public class TaskServiceImpl implements TaskService, Converter<Task, TaskWsDto> 
     public TaskWsDto convert(Task task) {
         TaskWsDto taskWsDto = new TaskWsDto(task.getId(), task.getTitle());
         Optional.ofNullable(task.getUser()).map(user -> {
-            user.setTasks(null);
-            return user;
-        }).ifPresent(taskWsDto::setUser);
+            UserWsDto userWsDto = new UserWsDto();
+            userWsDto.setTaskWsDtos(null);
+            userWsDto.setUsername(user.getUsername());
+            userWsDto.setEnabled(user.getEnabled());
+            userWsDto.setPassword(user.getPassword());
+            return userWsDto;
+        }).ifPresent(taskWsDto::setUserWsDto);
         return taskWsDto;
     }
 

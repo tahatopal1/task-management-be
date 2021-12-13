@@ -6,7 +6,7 @@ public class TaskWsDto {
 
     private int id;
     private String title;
-    private User user;
+    private UserWsDto userWsDto;
 
     public TaskWsDto() { }
 
@@ -31,11 +31,11 @@ public class TaskWsDto {
         this.title = title;
     }
 
-    public User getUser() {
-        return user;
+    public UserWsDto getUserWsDto() {
+        return userWsDto;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setUserWsDto(UserWsDto userWsDto) {
+        this.userWsDto = userWsDto;
     }
 }
