@@ -37,6 +37,13 @@ public class TaskServiceImpl implements TaskService, Converter<Task, TaskWsDto> 
     }
 
     @Override
+    public TaskWsDto find(Integer id) {
+        return taskRepository.findById(id)
+                .map(this::convert)
+                .orElse(new TaskWsDto());
+    }
+
+    @Override
     public TaskWsDto convert(Task task) {
         TaskWsDto taskWsDto = new TaskWsDto(task.getId(), task.getTitle());
         Optional.ofNullable(task.getUser()).map(user -> {

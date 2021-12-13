@@ -20,6 +20,11 @@ public class TaskController {
         return taskService.findAll();
     }
 
+    @GetMapping("/task/{id}")
+    public TaskWsDto getTask(@PathVariable Integer id){
+        return taskService.find(id);
+    }
+
     @PostMapping("/task")
     public TaskWsDto createTask(@RequestBody TaskWsDto taskWsDto,@RequestParam String username){
         taskService.createTask(taskWsDto, username);
