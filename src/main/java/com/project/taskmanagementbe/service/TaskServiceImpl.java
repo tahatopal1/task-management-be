@@ -44,6 +44,11 @@ public class TaskServiceImpl implements TaskService, Converter<Task, TaskWsDto> 
     }
 
     @Override
+    public void updateTask(TaskWsDto taskWsDto) {
+        taskRepository.save(this.convertReverse(taskWsDto, taskWsDto.getUserWsDto().getUsername()));
+    }
+
+    @Override
     public TaskWsDto convert(Task task) {
         TaskWsDto taskWsDto = new TaskWsDto(task.getId(), task.getTitle());
         Optional.ofNullable(task.getUser()).map(user -> {
