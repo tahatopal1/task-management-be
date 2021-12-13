@@ -10,6 +10,10 @@ public interface UsersService {
 
     List<UserWsDto> findAll();
 
-    void addTaskToUser(String username, Task task);
+    void addTaskToUser(Integer id, Task task);
+
+    UserWsDto find(Integer id);
+
+    UserWsDto findByUsername(String username);
 
 }

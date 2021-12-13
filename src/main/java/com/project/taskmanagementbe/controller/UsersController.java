@@ -21,9 +21,19 @@ public class UsersController {
         return usersService.findAll();
     }
 
-    @PostMapping("/users/{username}")
-    public void addTaskToUser(@PathVariable String username, @RequestBody Task task){
-        usersService.addTaskToUser(username, task);
+    @PostMapping("/users/{id}")
+    public void addTaskToUser(@PathVariable Integer id, @RequestBody Task task){
+        usersService.addTaskToUser(id, task);
+    }
+
+    @GetMapping("/users/{id}")
+    public UserWsDto find(@PathVariable Integer id){
+        return usersService.find(id);
+    }
+
+    @GetMapping("/users/username/{username}")
+    public UserWsDto findByUsername(@PathVariable String username){
+        return usersService.findByUsername(username);
     }
 
 }

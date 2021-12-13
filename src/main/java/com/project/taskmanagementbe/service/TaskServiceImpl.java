@@ -32,8 +32,8 @@ public class TaskServiceImpl implements TaskService, Converter<Task, TaskWsDto> 
 
     @Override
     @Transactional
-    public void createTask(TaskWsDto taskWsDto, String username) {
-        taskRepository.save(Optional.ofNullable(taskWsDto).map(wsDto -> convertReverse(taskWsDto, username)).get());
+    public void createTask(TaskWsDto taskWsDto, Integer id) {
+        taskRepository.save(Optional.ofNullable(taskWsDto).map(wsDto -> convertReverse(taskWsDto, id)).get());
     }
 
     @Override
@@ -45,7 +45,7 @@ public class TaskServiceImpl implements TaskService, Converter<Task, TaskWsDto> 
 
     @Override
     public void updateTask(TaskWsDto taskWsDto) {
-        taskRepository.save(this.convertReverse(taskWsDto, taskWsDto.getUserWsDto().getUsername()));
+        taskRepository.save(this.convertReverse(taskWsDto, taskWsDto.getUserWsDto().getId()));
     }
 
     @Override
@@ -55,16 +55,15 @@ public class TaskServiceImpl implements TaskService, Converter<Task, TaskWsDto> 
             UserWsDto userWsDto = new UserWsDto();
             userWsDto.setTaskWsDtos(null);
             userWsDto.setUsername(user.getUsername());
-            userWsDto.setEnabled(user.getEnabled());
             userWsDto.setPassword(user.getPassword());
             return userWsDto;
         }).ifPresent(taskWsDto::setUserWsDto);
         return taskWsDto;
     }
 
-    public Task convertReverse(TaskWsDto taskWsDto, String username){
+    public Task convertReverse(TaskWsDto taskWsDto, Integer id){
         Task task = new Task(taskWsDto.getId(), taskWsDto.getTitle());
-        usersRepository.findById(username).ifPresent(task::setUser);
+        usersRepository.findById(id).ifPresent(task::setUser);
         return task;
     }
 

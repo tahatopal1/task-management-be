@@ -1,3 +1,5 @@
+USE `task_management_app`;
+
 DROP TABLE IF EXISTS `task`;
 
 CREATE TABLE `task`
@@ -11,7 +13,7 @@ CREATE TABLE `task`
 
     CONSTRAINT `FK_TASK`
     FOREIGN KEY (`user_id`)
-    REFERENCES `users` (`username`)
+    REFERENCES `users` (`id`)
     ON DELETE NO ACTION ON UPDATE NO ACTION)
     ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=latin1;
 

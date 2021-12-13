@@ -8,7 +8,7 @@ public interface TaskService {
 
     List<TaskWsDto> findAll();
 
-    void createTask(TaskWsDto taskWsDto, String username);
+    void createTask(TaskWsDto taskWsDto, Integer id);
 
     TaskWsDto find(Integer id);
 
