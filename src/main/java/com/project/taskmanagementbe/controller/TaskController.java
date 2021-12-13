@@ -31,4 +31,10 @@ public class TaskController {
         return taskWsDto;
     }
 
+    @PutMapping("/task")
+    public TaskWsDto updateTask(@RequestBody TaskWsDto taskWsDto){
+        taskService.updateTask(taskWsDto);
+        return taskWsDto;
+    }
+
 }
