@@ -5,8 +5,16 @@ import com.project.taskmanagementbe.model.User;
 import com.project.taskmanagementbe.service.UsersService;
 import com.project.taskmanagementbe.wsdto.UserWsDto;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.List;
 
 @RestController
@@ -15,6 +23,9 @@ public class UsersController {
 
     @Autowired
     private UsersService usersService;
+
+    @Autowired
+    private DaoAuthenticationProvider daoAuthenticationProvider;
 
     @GetMapping("/users")
     public List<UserWsDto> findAll(){
@@ -32,8 +43,21 @@ public class UsersController {
     }
 
     @GetMapping("/users/username/{username}")
-    public UserWsDto findByUsername(@PathVariable String username){
-        return usersService.findByUsername(username);
+    public UserWsDto findByUsername(@PathVariable String username, HttpServletRequest request){
+        UserWsDto userWsDto = usersService.findByUsername(username);
+        if (userWsDto.getUsername() != null){
+            try {
+                UsernamePasswordAuthenticationToken authReq = new UsernamePasswordAuthenticationToken(userWsDto.getUsername(), userWsDto.getPassword());
+                Authentication auth = daoAuthenticationProvider.authenticate(authReq);
+                SecurityContext sc = SecurityContextHolder.getContext();
+                sc.setAuthentication(auth);
+                HttpSession session = request.getSession(true);
+                session.setAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY, sc);
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+        }
+        return userWsDto;
     }
 
 }
