@@ -10,12 +10,14 @@ import com.project.taskmanagementbe.wsdto.TaskWsDto;
 import com.project.taskmanagementbe.wsdto.UserWsDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.converter.Converter;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -78,5 +80,23 @@ public class UsersServiceImpl implements UsersService, Converter<User, UserWsDto
                                 .map(role -> new RoleWsDto(role.getName()))
                                 .collect(Collectors.toList()));
         return userWsDto;
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        //Map<String, String> params = new HashMap<>();
+        //params.put("username", username);
+        User user = usersRepository.findByUsername(username);
+        if (user == null)
+            throw new UsernameNotFoundException("Invalid username or password.");
+        return new org.springframework.security.core.userdetails.User(
+                user.getUsername(), user.getPassword(), mapRolesToAuthorities(user.getRoles())
+        );
+
+    }
+
+    private Collection<? extends GrantedAuthority> mapRolesToAuthorities(List<Role> roles) {
+        return roles.stream().map(role -> new SimpleGrantedAuthority(role.getName()))
+                .collect(Collectors.toList());
     }
 }
