@@ -1,11 +1,18 @@
 package com.project.taskmanagementbe.controller;
 
-import com.project.taskmanagementbe.model.Task;
 import com.project.taskmanagementbe.service.TaskService;
 import com.project.taskmanagementbe.wsdto.TaskWsDto;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.List;
 
 @RestController
@@ -26,8 +33,8 @@ public class TaskController {
     }
 
     @PostMapping("/task")
-    public TaskWsDto createTask(@RequestBody TaskWsDto taskWsDto,@RequestParam String username){
-        taskService.createTask(taskWsDto, username);
+    public TaskWsDto createTask(@RequestBody TaskWsDto taskWsDto,@RequestParam Integer id){
+        taskService.createTask(taskWsDto, id);
         return taskWsDto;
     }
 
