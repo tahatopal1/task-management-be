@@ -42,19 +42,21 @@ public class UsersController {
         return usersService.find(id);
     }
 
-    @GetMapping("/users/username/{username}")
-    public UserWsDto findByUsername(@PathVariable String username, HttpServletRequest request){
+    @GetMapping("/users/username")
+    public UserWsDto findByUsername(@RequestParam("username") String username, @RequestParam("isAuth") boolean isAuth, HttpServletRequest request){
         UserWsDto userWsDto = usersService.findByUsername(username);
         if (userWsDto.getUsername() != null){
-            try {
-                UsernamePasswordAuthenticationToken authReq = new UsernamePasswordAuthenticationToken(userWsDto.getUsername(), userWsDto.getPassword());
-                Authentication auth = daoAuthenticationProvider.authenticate(authReq);
-                SecurityContext sc = SecurityContextHolder.getContext();
-                sc.setAuthentication(auth);
-                HttpSession session = request.getSession(true);
-                session.setAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY, sc);
-            }catch (Exception e){
-                e.printStackTrace();
+            if (isAuth){
+                try {
+                    UsernamePasswordAuthenticationToken authReq = new UsernamePasswordAuthenticationToken(userWsDto.getUsername(), userWsDto.getPassword());
+                    Authentication auth = daoAuthenticationProvider.authenticate(authReq);
+                    SecurityContext sc = SecurityContextHolder.getContext();
+                    sc.setAuthentication(auth);
+                    HttpSession session = request.getSession(true);
+                    session.setAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY, sc);
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
             }
         }
         return userWsDto;
