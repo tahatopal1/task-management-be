@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.ObjectUtils;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
 import java.util.Optional;
@@ -63,7 +65,10 @@ public class TaskServiceImpl implements TaskService, Converter<Task, TaskWsDto> 
 
     public Task convertReverse(TaskWsDto taskWsDto, Integer id){
         Task task = new Task(taskWsDto.getId(), taskWsDto.getTitle());
-        usersRepository.findById(id).ifPresent(task::setUser);
+        if (!ObjectUtils.isEmpty(id))
+            usersRepository.findById(id).ifPresent(task::setUser);
+        else if (!StringUtils.isEmpty(taskWsDto.getUserWsDto().getUsername()))
+            Optional.ofNullable(usersRepository.findByUsername(taskWsDto.getUserWsDto().getUsername())).ifPresent(task::setUser);
         return task;
     }
 
