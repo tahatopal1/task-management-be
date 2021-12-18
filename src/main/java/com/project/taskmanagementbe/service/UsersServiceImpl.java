@@ -69,7 +69,7 @@ public class UsersServiceImpl implements UsersService, Converter<User, UserWsDto
 
     @Override
     public UserWsDto convert(User user) {
-        UserWsDto userWsDto = new UserWsDto(user.getUsername(), user.getPassword());
+        UserWsDto userWsDto = new UserWsDto(user.getId(), user.getUsername(), user.getPassword(), user.getFirstName(), user.getLastName(), user.getEmail());
         userWsDto.setTaskWsDtos(user.getTasks().stream().map(task -> {
             TaskWsDto taskWsDto = new TaskWsDto();
             taskWsDto.setUserWsDto(null);
@@ -100,4 +100,7 @@ public class UsersServiceImpl implements UsersService, Converter<User, UserWsDto
                 .collect(Collectors.toList());
         return collect;
     }
+
+
+
 }
