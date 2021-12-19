@@ -3,6 +3,7 @@ package com.project.taskmanagementbe.model;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "task")
@@ -13,6 +14,11 @@ public class Task {
     private int id;
 
     private String title;
+    private String definition;
+
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "task_id")
+    private List<Entry> entries;
 
     public Task() { }
 
@@ -48,11 +54,27 @@ public class Task {
         this.title = title;
     }
 
+    public String getDefinition() {
+        return definition;
+    }
+
+    public void setDefinition(String definition) {
+        this.definition = definition;
+    }
+
     public User getUser() {
         return user;
     }
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public List<Entry> getEntries() {
+        return entries;
+    }
+
+    public void setEntries(List<Entry> entries) {
+        this.entries = entries;
     }
 }

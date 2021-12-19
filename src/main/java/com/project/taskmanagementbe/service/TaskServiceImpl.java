@@ -52,7 +52,7 @@ public class TaskServiceImpl implements TaskService, Converter<Task, TaskWsDto> 
 
     @Override
     public TaskWsDto convert(Task task) {
-        TaskWsDto taskWsDto = new TaskWsDto(task.getId(), task.getTitle());
+        TaskWsDto taskWsDto = new TaskWsDto(task.getId(), task.getTitle(), task.getDefinition());
         Optional.ofNullable(task.getUser()).map(user -> {
             UserWsDto userWsDto = new UserWsDto();
             userWsDto.setTaskWsDtos(null);
