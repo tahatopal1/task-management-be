@@ -2,12 +2,15 @@ package com.project.taskmanagementbe.wsdto;
 
 import com.project.taskmanagementbe.model.User;
 
+import java.util.List;
+
 public class TaskWsDto {
 
     private int id;
     private String title;
     private String definition;
     private UserWsDto userWsDto;
+    private List<EntryWsDto> entryWsDtos;
 
     public TaskWsDto() { }
 
@@ -52,5 +55,13 @@ public class TaskWsDto {
 
     public void setUserWsDto(UserWsDto userWsDto) {
         this.userWsDto = userWsDto;
+    }
+
+    public List<EntryWsDto> getEntryWsDtos() {
+        return entryWsDtos;
+    }
+
+    public void setEntryWsDtos(List<EntryWsDto> entryWsDtos) {
+        this.entryWsDtos = entryWsDtos;
     }
 }

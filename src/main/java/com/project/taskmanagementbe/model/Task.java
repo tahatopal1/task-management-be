@@ -27,6 +27,12 @@ public class Task {
         this.title = title;
     }
 
+    public Task(int id, String title, String definition) {
+        this.id = id;
+        this.title = title;
+        this.definition = definition;
+    }
+
     public Task(int id, String title, User user) {
         this.id = id;
         this.title = title;

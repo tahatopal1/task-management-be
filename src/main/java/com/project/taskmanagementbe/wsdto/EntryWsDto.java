@@ -1,26 +1,18 @@
-package com.project.taskmanagementbe.model;
+package com.project.taskmanagementbe.wsdto;
 
-import javax.persistence.*;
+public class EntryWsDto {
 
-@Entity
-@Table(name = "entry")
-public class Entry {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-
-    @Lob
     private String comment;
 
-    public Entry() { }
+    public EntryWsDto() { }
 
-    public Entry(int id, String comment) {
-        this.id = id;
+    public EntryWsDto(String comment) {
         this.comment = comment;
     }
 
-    public Entry(String comment) {
+    public EntryWsDto(int id, String comment) {
+        this.id = id;
         this.comment = comment;
     }
 

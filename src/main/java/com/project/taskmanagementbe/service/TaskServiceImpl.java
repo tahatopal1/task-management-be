@@ -3,6 +3,7 @@ package com.project.taskmanagementbe.service;
 import com.project.taskmanagementbe.model.Task;
 import com.project.taskmanagementbe.repository.TaskRepository;
 import com.project.taskmanagementbe.repository.UsersRepository;
+import com.project.taskmanagementbe.wsdto.EntryWsDto;
 import com.project.taskmanagementbe.wsdto.TaskWsDto;
 import com.project.taskmanagementbe.wsdto.UserWsDto;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,11 +61,15 @@ public class TaskServiceImpl implements TaskService, Converter<Task, TaskWsDto> 
             userWsDto.setPassword(user.getPassword());
             return userWsDto;
         }).ifPresent(taskWsDto::setUserWsDto);
+        taskWsDto.setEntryWsDtos(task.getEntries()
+                .stream()
+                .map(entry -> new EntryWsDto(entry.getId(), entry.getComment()))
+                .collect(Collectors.toList()));
         return taskWsDto;
     }
 
     public Task convertReverse(TaskWsDto taskWsDto, Integer id){
-        Task task = new Task(taskWsDto.getId(), taskWsDto.getTitle());
+        Task task = new Task(taskWsDto.getId(), taskWsDto.getTitle(), taskWsDto.getDefinition());
         if (!ObjectUtils.isEmpty(id))
             usersRepository.findById(id).ifPresent(task::setUser);
         else if (!StringUtils.isEmpty(taskWsDto.getUserWsDto().getUsername()))
