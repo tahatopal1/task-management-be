@@ -52,6 +52,11 @@ public class TaskServiceImpl implements TaskService, Converter<Task, TaskWsDto> 
     }
 
     @Override
+    public void remove(Integer id) {
+        taskRepository.deleteById(id);
+    }
+
+    @Override
     public TaskWsDto convert(Task task) {
         TaskWsDto taskWsDto = new TaskWsDto(task.getId(), task.getTitle(), task.getDefinition());
         Optional.ofNullable(task.getUser()).map(user -> {
